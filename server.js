@@ -8,6 +8,7 @@ import { createServer } from "node:http";
 
 // Load environment variables
 dotenv.config();
+
 // Initialize the app
 const app = express();
 const server = createServer(app);
@@ -17,9 +18,10 @@ app.use(cors());
 app.use(bodyParser.json());
 
 connectDB();
-// Define a basic route
+// Routes
+app.get('/login', () => {})
 app.get('/', (req, res) => {
-  res.send('Welcome to my custom Node.js backend!');
+  res.send('Access gate to a custom Node.js backend!');
 });
 
 // Start the server
