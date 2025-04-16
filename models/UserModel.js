@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const UserSchema = new Schema(
   {
-    username: {
+    name: {
       type: String,
       required: true,
     },
@@ -30,6 +30,10 @@ const UserSchema = new Schema(
       required: true,
       unique: true,
     },
+    username: {
+      type: String,
+      required: true,
+    },
     password: {
       type: String,
       required: true,
@@ -44,10 +48,6 @@ const UserSchema = new Schema(
       type: String,
       enum: ["active", "inactive", "suspended"],
       default: "inactive",
-    },
-    registrationDate: {
-      type: Date,
-      default: Date.now,
     },
     lastLoginDate: {
       type: Date,
