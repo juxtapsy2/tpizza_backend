@@ -1,11 +1,10 @@
-// Import necessary modules
 import connectDB from "./config/database.js";
 import express from "express";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { createServer } from "node:http";
-
+import authRoutes from "./routes/authRoutes.js";
 // Load environment variables
 dotenv.config();
 
@@ -14,15 +13,11 @@ const app = express();
 const server = createServer(app);
 app.use(express.json());
 app.use(cors());
-// Middleware to parse JSON data
 app.use(bodyParser.json());
 
 connectDB();
 // Routes
-app.get('/login', () => {})
-app.get('/', (req, res) => {
-  res.send('Access gate to a custom Node.js backend!');
-});
+app.use("/api/auth", authRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 8800;

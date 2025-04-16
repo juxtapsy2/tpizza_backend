@@ -23,7 +23,6 @@ const UserSchema = new Schema(
     phone: {
       type: String,
       required: true,
-      unique: true,
     },
     email: {
       type: String,
@@ -32,7 +31,7 @@ const UserSchema = new Schema(
     },
     username: {
       type: String,
-      required: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -44,6 +43,12 @@ const UserSchema = new Schema(
       default: "User",
       required: true,
     },
+    emailVerificationToken: {
+      type: String,
+    },
+    emailVerificationExpires: {
+      type: Date,
+    },    
     status: {
       type: String,
       enum: ["active", "inactive", "suspended"],
