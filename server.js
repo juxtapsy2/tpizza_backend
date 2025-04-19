@@ -27,3 +27,6 @@ const PORT = process.env.PORT || 8800;
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+app.get('/', (req, res) => {
+  res.send('TPizza API is running 🍕');
+});
