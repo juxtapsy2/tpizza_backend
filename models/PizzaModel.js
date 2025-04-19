@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const DishSchema = new Schema(
+const PizzaSchema = new Schema(
   {
     title: {
       type: String,
@@ -24,7 +24,7 @@ const DishSchema = new Schema(
       default: "",
     },
     class: {
-      type: String,
+      type: [String],
     },
     size: {
       type: Number,
@@ -62,19 +62,19 @@ const generateSlug = (text) =>
       .replace(/^-+|-+$/g, "");  // trim hyphens from start/end
 
 // Auto-generate slug before saving
-DishSchema.pre("save", async function (next) {
+PizzaSchema.pre("save", async function (next) {
   if (!this.isModified("title")) return next();
 
   const baseSlug = generateSlug(this.title);
   let slug = baseSlug;
   let counter = 1;
 
-  // Ensure the slug is unique in the "Dish" collection
-  while (await mongoose.models.Dish.findOne({ slug })) {
+  // Ensure the slug is unique in the "Pizza" collection
+  while (await mongoose.models.Pizza.findOne({ slug })) {
     slug = `${baseSlug}-${counter++}`;
   }
   this.slug = slug;
   next();
 });
 
-export default mongoose.model("Dish", DishSchema);
+export default mongoose.model("Pizza", PizzaSchema);

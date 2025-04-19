@@ -5,6 +5,8 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import { createServer } from "node:http";
 import authRoutes from "./routes/authRoutes.js";
+import pizzaRoutes from "./routes/pizzaRoutes.js";
+
 // Load environment variables
 dotenv.config();
 
@@ -18,6 +20,7 @@ app.use(bodyParser.json());
 connectDB();
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/pizza", pizzaRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 8800;
