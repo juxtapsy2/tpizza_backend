@@ -4,7 +4,7 @@ import mongoose from "mongoose";
  * @returns {Promise<void>}
  */
 const connectDB = async () => {
-  const uri = "mongodb://localhost:27017/tpizza" || process.env.CONNECT_STRING
+  const uri = process.env.CONNECT_STRING || "mongodb://localhost:27017/tpizza"
   try {
     await mongoose.connect(uri);
     console.log("Connected to database.");
