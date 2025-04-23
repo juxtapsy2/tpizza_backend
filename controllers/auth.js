@@ -4,20 +4,18 @@ import jwt from "jsonwebtoken";
 import User from "../models/UserModel.js";
 import sendEmail from "../utils/sendEmail.js";
 import { verifyEmailTemplate } from "../constants/verifyEmailTemplate.js";
-
-const isDev = process.env.NODE_ENV !== "production";
-const backendURL = isDev ? "http://localhost:8800" : process.env.BACKEND_URL;
-const frontendURL = isDev? "http://localhost:3000" : process.env.FRONTEND_URL;
+import { frontendURL } from "../constants/constants.js";
 
 export const sendVerificationEmail = async (to, token) => {
   const url = `${frontendURL}/verify-email?token=${token}`;
-  const htmlTemplate = verifyEmailTemplate(url);
+  const author = process.env.BREVO_EMAIL;
+  const verifyTemplate = verifyEmailTemplate(url);
 
   await sendEmail({
-    from: '"TPizza 🍕" <frost.death.ap@gmail.com>',
+    from: `"TPizza 🍕" <${author}>`,
     to,
     subject: "Xác minh tài khoản TPizza của bạn",
-    html: htmlTemplate,
+    html: verifyTemplate,
   });
 };
 
@@ -82,19 +80,24 @@ export const verifyEmail = async (req, res) => {
   user.emailVerificationExpires = undefined;
   await user.save();
 
-  console.log("Người dùng xác thực email thành công:", user.email);
+  console.log("Email verified:", user.email);
   res.status(200).json({ message: "Xác minh email thành công!" });
 };
 
 // Login user and generate JWT
 export const loginUser = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { identifier, password } = req.body; // Allow 'identifier' to be either email or username
 
-    // Find user by username
-    const user = await User.findOne({ username });
+    let user;
+    if (/\S+@\S+\.\S+/.test(identifier)) {  // email regex
+      user = await User.findOne({ email: identifier });
+    } else {
+      user = await User.findOne({ username: identifier });
+    }
+
     if (!user) {
-      return res.status(400).json({ message: "Tên đăng nhập hoặc mật khẩu không chính xác." });
+      return res.status(400).json({ message: "Tên đăng nhập hoặc mật khẩu không đúng." });
     }
 
     // Check if email is verified
@@ -110,8 +113,8 @@ export const loginUser = async (req, res) => {
 
     // Create JWT token
     const token = jwt.sign(
-      { userId: user._id, username: user.username },
-      process.env.JWT_SECRET,
+      { userId: user._id, username: user.username, email: user.email },
+      process.env.THE_JWT_KEY_HACKERS_LONG_FOR,
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
@@ -120,7 +123,7 @@ export const loginUser = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // Set to true in production with HTTPS
       sameSite: "lax",
-      maxAge: 60 * 60 * 1000, // 1h
+      maxAge: 60 * 60 * 1000, // 1 hour
     });
 
     res.status(200).json({ message: "Đăng nhập thành công." });

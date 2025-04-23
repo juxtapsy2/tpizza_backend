@@ -6,6 +6,7 @@ import cors from "cors";
 import { createServer } from "node:http";
 import authRoutes from "./routes/authRoutes.js";
 import pizzaRoutes from "./routes/pizzaRoutes.js";
+import { isDev, frontendURL, backendURL } from "./constants/constants.js";
 
 // Load environment variables
 dotenv.config();
@@ -14,7 +15,10 @@ dotenv.config();
 const app = express();
 const server = createServer(app);
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: frontendURL,
+  credentials: true,
+}));
 app.use(bodyParser.json());
 
 connectDB();
