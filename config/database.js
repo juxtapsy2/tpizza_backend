@@ -4,10 +4,11 @@ import mongoose from "mongoose";
  * @returns {Promise<void>}
  */
 const connectDB = async () => {
-  const uri = process.env.CONNECT_STRING || "mongodb://localhost:27017/tpizza"
+  const isDev = process.env.NODE_ENV !== "production";
+  const uri = isDev ? "mongodb://localhost:27017/tpizza" : process.env.CONNECT_STRING;
   try {
     await mongoose.connect(uri);
-    console.log("Connected to database.");
+    console.log(`Connected to ${isDev ? "Local DB" : "Production DB"}`);
   } catch (error) {
     console.error("Error connecting db:", error.message);
     process.exit(1);
