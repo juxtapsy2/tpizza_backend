@@ -35,5 +35,5 @@ app.use("/api/user", userRoutes);
 // Start the server
 const PORT = process.env.PORT || 8800;
 server.listen(PORT, () => {
-  console.log(`Server running on ${frontendURL}`);
+  console.log(`Server running on ${backendURL}`);
 });
