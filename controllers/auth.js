@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/UserModel.js";
 import sendEmail from "../utils/sendEmail.js";
 import { verifyEmailTemplate } from "../constants/verifyEmailTemplate.js";
-import { frontendURL } from "../constants/constants.js";
+import { frontendURL, isDev } from "../constants/constants.js";
 
 export const sendVerificationEmail = async (to, token) => {
   const url = `${frontendURL}/verify-email?token=${token}`;
@@ -125,7 +125,7 @@ export const loginUser = async (req, res) => {
     // Send the token as a cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Set to true in production with HTTPS
+      secure: !isDev, // secure mode (HTTPS) in production
       sameSite: "lax",
       maxAge: 60 * 60 * 1000, // 1 hour
     });
@@ -139,6 +139,7 @@ export const loginUser = async (req, res) => {
 
 // Logout user by clearing the JWT cookie
 export const logoutUser = (req, res) => {
+  console.log("User logged out:", req.cookies.token);
   res.clearCookie("token");
   res.status(200).json({ message: "Đã đăng xuất." });
 };
