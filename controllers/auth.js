@@ -113,7 +113,11 @@ export const loginUser = async (req, res) => {
 
     // Create JWT token
     const token = jwt.sign(
-      { userId: user._id, username: user.username, email: user.email },
+      {
+        userId: user._id, // rõ ràng là userId
+        username: user.username,
+        email: user.email,
+      },
       process.env.THE_JWT_KEY_HACKERS_LONG_FOR,
       { expiresIn: process.env.JWT_EXPIRES_IN }
     );
@@ -125,7 +129,7 @@ export const loginUser = async (req, res) => {
       sameSite: "lax",
       maxAge: 60 * 60 * 1000, // 1 hour
     });
-
+    console.log("User logged in:", user.username);
     res.status(200).json({ message: "Đăng nhập thành công." });
   } catch (error) {
     res.status(500).json({ message: "Lỗi máy chủ." });
