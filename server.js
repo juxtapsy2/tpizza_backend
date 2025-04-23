@@ -10,6 +10,11 @@ import pizzaRoutes from "./routes/pizzaRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import { isDev, frontendURL, backendURL } from "./constants/constants.js";
 
+app.use(cors({
+  origin: frontendURL,
+  credentials: true,
+}));
+
 // Load environment variables
 dotenv.config();
 
@@ -17,10 +22,6 @@ dotenv.config();
 const app = express();
 const server = createServer(app);
 app.use(express.json());
-app.use(cors({
-  origin: frontendURL,
-  credentials: true,
-}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
