@@ -3,6 +3,7 @@ import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import User from "../models/UserModel.js";
 import sendEmail from "../utils/sendEmail.js";
+import { verifyEmailTemplate } from "../constants/verifyEmailTemplate.js";
 
 const isDev = process.env.NODE_ENV !== "production";
 const backendURL = isDev ? "http://localhost:8800" : process.env.BACKEND_URL;
@@ -10,17 +11,13 @@ const frontendURL = isDev? "http://localhost:3000" : process.env.FRONTEND_URL;
 
 export const sendVerificationEmail = async (to, token) => {
   const url = `${frontendURL}/verify-email?token=${token}`;
+  const htmlTemplate = verifyEmailTemplate(url);
 
   await sendEmail({
     from: '"TPizza 🍕" <frost.death.ap@gmail.com>',
     to,
     subject: "Xác minh tài khoản TPizza của bạn",
-    html: `
-      <h3>Chào mừng đến với TPizza!</h3>
-      <p>Nhấn vào liên kết dưới đây để xác minh email của bạn:</p>
-      <a href="${url}" style="padding:10px 20px;background:#22c55e;color:white;border-radius:8px;text-decoration:none;">Xác minh Email</a>
-      <p>Nếu bạn không tạo tài khoản này, hãy bỏ qua email này.</p>
-    `,
+    html: htmlTemplate,
   });
 };
 
@@ -55,11 +52,10 @@ export const registerUser = async (req, res) => {
     });
 
     // Send email with the verification token
-    const verificationUrl = `${backendURL}/verify-email?token=${verificationToken}`;
     await sendVerificationEmail(user.email, verificationToken);
 
     res.status(201).json({ message: "Đăng ký thành công. Vui lòng kiểm tra email của bạn để xác minh tài khoản." });
-    console.log("Đăng ký người dùng thành công: ", user.username);
+    console.log("User registered: ", user.username);
   } catch (error) {
     res.status(500).json({ message: "Lỗi máy chủ." });
     console.log("Error registering user:", error);
