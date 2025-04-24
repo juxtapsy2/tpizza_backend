@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/UserModel.js";
 import sendEmail from "../utils/sendEmail.js";
 import { verifyEmailTemplate } from "../constants/verifyEmailTemplate.js";
-import { frontendURL, isDev } from "../constants/constants.js";
+import { frontendURL, isDev, frontendDomain } from "../constants/constants.js";
 
 export const sendVerificationEmail = async (to, token) => {
   const url = `${frontendURL}/verify-email?token=${token}`;
@@ -125,9 +125,11 @@ export const loginUser = async (req, res) => {
     // Send the token as a cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // secure mode (HTTPS) in production
+      secure: !isDev, // secure mode (HTTPS) in production
       sameSite: "lax",
       maxAge: 60 * 60 * 1000, // 1 hour
+      domain: frontendDomain,
+      path: '/', // Ensure the cookie is available globally
     });
     console.log("User logged in:", user.username);
     res.status(200).json({ message: "Đăng nhập thành công." });
