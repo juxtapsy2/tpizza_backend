@@ -114,7 +114,7 @@ export const loginUser = async (req, res) => {
     // Create JWT token
     const token = jwt.sign(
       {
-        userId: user._id, // rõ ràng là userId
+        userId: user._id,
         username: user.username,
         email: user.email,
       },
@@ -126,7 +126,7 @@ export const loginUser = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: !isDev, // secure mode (HTTPS) in production
-      sameSite: "lax",
+      sameSite: "none",
       maxAge: 60 * 60 * 1000, // 1 hour
     });
     console.log("User logged in:", user.username);
@@ -139,7 +139,6 @@ export const loginUser = async (req, res) => {
 
 // Logout user by clearing the JWT cookie
 export const logoutUser = (req, res) => {
-  console.log("User logged out:", req.cookies.token);
   res.clearCookie("token");
   res.status(200).json({ message: "Đã đăng xuất." });
 };

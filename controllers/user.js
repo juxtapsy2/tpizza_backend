@@ -1,12 +1,11 @@
 import User from "../models/UserModel.js";
 import jwt from "jsonwebtoken";
 
-export const getUserByToken = async(req, res) => {
+export const extractUserFromToken = async(req, res) => {
+  const token = req.cookies.token;
+    
+  if (token) {
     try {
-      const token = req.cookies.token;
-  
-      if (!token) return res.status(401).json({ message: 'Không có token.' });
-  
       const decoded = jwt.verify(token, process.env.THE_JWT_KEY_HACKERS_LONG_FOR);
       const user = await User.findById(decoded.userId).select('-password');
   
@@ -17,4 +16,7 @@ export const getUserByToken = async(req, res) => {
       console.error(err);
       res.status(401).json({ message: 'Token không hợp lệ hoặc đã hết hạn.' });
     }
+  }
+  else
+    return res.status(401).json({ message: 'Không có token.' });
 };
