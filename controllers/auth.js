@@ -125,7 +125,7 @@ export const loginUser = async (req, res) => {
     // Send the token as a cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: !isDev, // secure mode (HTTPS) in production
+      secure: false, // secure mode (HTTPS) in production
       sameSite: "lax",
       maxAge: 60 * 60 * 1000, // 1 hour
     });
