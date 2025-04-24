@@ -37,3 +37,7 @@ const PORT = process.env.PORT || 8800;
 server.listen(PORT, () => {
   console.log(`Server running on ${backendURL}`);
 });
+
+app.get("/", async( req, res ) => {
+  return "TPizza is running!"
+})
