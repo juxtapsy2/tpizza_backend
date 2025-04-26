@@ -140,6 +140,12 @@ export const loginUser = async (req, res) => {
 
 // Logout user by clearing the JWT cookie
 export const logoutUser = (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+      secure: !isDev, // secure mode (HTTPS) in production
+      sameSite: isDev ? "lax" : "none",
+      maxAge: 60 * 60 * 1000, // 1 hour
+      path: '/', // Ensure the cookie is available globally
+  });
   res.status(200).json({ message: "Đã đăng xuất." });
 };
