@@ -97,7 +97,7 @@ export const loginUser = async (req, res) => {
     }
 
     if (!user) {
-      return res.status(400).json({ message: "Tên đăng nhập hoặc mật khẩu không đúng." });
+      return res.status(400).json({ message: "Người dùng không tồn tại." });
     }
 
     // Check if email is verified
@@ -128,7 +128,6 @@ export const loginUser = async (req, res) => {
       secure: !isDev, // secure mode (HTTPS) in production
       sameSite: "lax",
       maxAge: 60 * 60 * 1000, // 1 hour
-      domain: cookieDomain,
       path: '/', // Ensure the cookie is available globally
     });
     console.log("User logged in:", user.username);

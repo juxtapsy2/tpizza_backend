@@ -17,6 +17,7 @@ dotenv.config();
 const app = express();
 const server = createServer(app);
 
+console.log("Frontend URL:", frontendURL);
 app.use(cors({
   origin: frontendURL,
   credentials: true,
