@@ -47,7 +47,12 @@ const PizzaSchema = new Schema(
       default: "Thin",
     },
     toppings: {
-      type: [String],
+      type: [
+        {
+          name: { type: String, required: true },
+          price: { type: Number, required: true, min: 0 },
+        }
+      ],
       default: [],
     },
     status: {
