@@ -6,6 +6,7 @@ export const isDev = process.env.NODE_ENV !== "production";
 export const backendURL = isDev ? "http://localhost:8800" : process.env.BACKEND_URL;
 export const frontendURL = isDev ? "http://localhost:3000" : process.env.FRONTEND_URL;
 export const cookieDomain = isDev ? "" : ".vercel.app";
+export const momoRedirectUrl = isDev? "http://localhost:3000/thanks" : process.env.MOMO_REDIRECT_URL;
 
 export const PIZZA_PRICES = {
     "7-Thin": 99000,
