@@ -26,14 +26,24 @@ const PizzaSchema = new Schema(
     class: {
       type: [String],
     },
-    size: {
-      type: Number,
-      enum: [7, 9, 12], // inches
-      default: 7,
+    availableSizes: {
+      type: [Number],
+      enum: [7, 9, 12],
+      default: [7, 9, 12],
     },
-    crustStyle: {
+    availableCrusts: {
+      type: [String],
+      enum: ["Thin", "Regular", "Thick", "Stuffed"],
+      default: ["Thin", "Regular", "Thick"],
+    },
+    defaultSize: {
+      type: Number,
+      enum: [7, 9, 12],
+      default: 9,
+    },
+    defaultCrustStyle: {
       type: String,
-      enum: ["Thin", "Regular", "Thick", "Deep", "Stuffed"],
+      enum: ["Thin", "Regular", "Thick", "Stuffed"],
       default: "Thin",
     },
     toppings: {
