@@ -3,15 +3,25 @@ const { Schema } = mongoose;
 
 const OrderSchema = new Schema(
   {
+    orderCode: { type: String, required: true, unique: true },  // short code for later research
     userId: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "User",
     },
-    dishes: {
-      type: [String],   // dish slugs
-      required: true,
-    },
+    dishes: [
+      {
+        slug: {
+          type: String,
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+          min: 1,
+        },
+      }
+    ],
     date: {
       type: Date,
       default: null,
@@ -21,9 +31,14 @@ const OrderSchema = new Schema(
       required: true,
       min: 0,
     },
+    paymentMethod: {
+      type: String,
+      enum: ["cod", "momo"],
+      required: true,
+    },
     status: {
       type: String,
-      enum: ["ongoing", "accomplished", "cancelled"],
+      enum: ["processing", "cooking", "ongoing", "accomplished", "cancelled"],
       default: "ongoing",
     },
     rating: {

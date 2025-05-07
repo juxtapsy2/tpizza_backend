@@ -8,6 +8,8 @@ import { createServer } from "node:http";
 import authRoutes from "./routes/authRoutes.js";
 import pizzaRoutes from "./routes/pizzaRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 import { isDev, frontendURL, backendURL } from "./constants/constants.js";
 
 // Load environment variables
@@ -34,6 +36,8 @@ connectDB();
 app.use("/api/auth", authRoutes);
 app.use("/api/pizza", pizzaRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/payment", paymentRoutes);
+app.use("/api/order", orderRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 8800;

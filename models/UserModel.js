@@ -28,6 +28,10 @@ const UserSchema = new Schema(
       required: true,
       unique: true,
     },
+    address: {
+      type: String,
+      required: false,
+    },
     username: {
       type: String,
       unique: true,

@@ -117,3 +117,29 @@ export const updateAvatar = async (req, res) => {
     res.status(500).json({ message: 'Cập nhật ảnh thất bại' });
   }
 };
+
+export const updateAddress = async (req, res) => {
+  const { address } = req.body;
+  const userId = req.user.userId; 
+
+  // Validate the new address
+  if (!address || address.trim() === '') {
+    return res.status(400).json({ error: 'Địa chỉ không được để trống!' });
+  }
+
+  try {
+    // Find the user and update the address
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    user.address = address;
+    await user.save();
+    console.log("User updated address:", user.username);
+    res.status(200).json({ message: 'Địa chỉ đã được cập nhật!', user });
+  } catch (error) {
+    console.error('Error updating address:', error);
+    res.status(500).json({ error: 'Có lỗi xảy ra khi cập nhật địa chỉ. Vui lòng thử lại.' });
+  }
+};

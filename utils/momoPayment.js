@@ -1,7 +1,6 @@
-// utils/momo.js
 import crypto from "crypto";
 import https from "https";
-import { momoRedirectUrl } from "../constants/constants";
+import { momoRedirectUrl } from "../constants/constants.js";
 
 export const createMomoPayment = ({ orderInfo, amount, extraData }) => {
   return new Promise((resolve, reject) => {
@@ -41,7 +40,7 @@ export const createMomoPayment = ({ orderInfo, amount, extraData }) => {
     const requestBody = JSON.stringify({
       partnerCode: config.partnerCode,
       partnerName: "Test",
-      storeId: "TestStore",
+      storeId: "MomoTestStore",
       requestId,
       amount,
       orderId,
