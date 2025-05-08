@@ -117,6 +117,7 @@ export const loginUser = async (req, res) => {
         userId: user._id,
         username: user.username,
         email: user.email,
+        role: user.role,
       },
       process.env.THE_JWT_KEY_HACKERS_LONG_FOR,
       { expiresIn: process.env.JWT_EXPIRES_IN }

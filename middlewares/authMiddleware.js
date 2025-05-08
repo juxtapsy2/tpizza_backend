@@ -16,3 +16,8 @@ export const verifyToken = (req, res, next) => {
     return res.status(403).json({ message: "Phiên đăng nhập không hợp lệ." });
   }
 };
+
+export const verifyAdmin = (req, res, next) => {
+  if (req.user?.role === 'Admin') next();
+  else res.status(403).json({ message: 'Forbidden' });
+};

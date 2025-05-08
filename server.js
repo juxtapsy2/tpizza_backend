@@ -10,6 +10,7 @@ import pizzaRoutes from "./routes/pizzaRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 import { isDev, frontendURL, backendURL } from "./constants/constants.js";
 
 // Load environment variables
@@ -38,6 +39,7 @@ app.use("/api/pizza", pizzaRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/order", orderRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 8800;
