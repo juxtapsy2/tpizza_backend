@@ -3,21 +3,21 @@ import User from "../models/UserModel.js";
 
 export const getSalesOverTime = async (req, res) => {
   const { range = 'daily' } = req.query;
-
+  
   const now = new Date();
   let groupFormat, startDate;
 
   if (range === 'monthly') {
-    groupFormat = { year: { $year: '$orderDate' }, month: { $month: '$orderDate' } };
+    groupFormat = { year: { $year: '$date' }, month: { $month: '$date' } };
     startDate = new Date(now.getFullYear(), now.getMonth() - 11, 1); // last 12 months
   } else if (range === 'weekly') {
-    groupFormat = { year: { $year: '$orderDate' }, week: { $isoWeek: '$orderDate' } };
+    groupFormat = { year: { $isoWeekYear: '$date' }, week: { $isoWeek: '$date' } };
     const past90Days = new Date(now);
     past90Days.setDate(now.getDate() - 90);
     startDate = past90Days;
   } else {
     // default to daily
-    groupFormat = { year: { $year: '$orderDate' }, month: { $month: '$orderDate' }, day: { $dayOfMonth: '$orderDate' } };
+    groupFormat = { year: { $year: '$date' }, month: { $month: '$date' }, day: { $dayOfMonth: '$date' } };
     const past30Days = new Date(now);
     past30Days.setDate(now.getDate() - 30);
     startDate = past30Days;
@@ -28,7 +28,7 @@ export const getSalesOverTime = async (req, res) => {
       {
         $match: {
           status: 'accomplished',
-          orderDate: { $gte: startDate },
+          date: { $gte: startDate },
         }
       },
       {
@@ -41,7 +41,7 @@ export const getSalesOverTime = async (req, res) => {
         $sort: { '_id.year': 1, '_id.month': 1, '_id.day': 1 }
       }
     ]);
-
+    console.log("Statistical orders for admin:", result);
     res.status(200).json(result);
   } catch (err) {
     console.error('Error fetching sales data:', err);
@@ -67,6 +67,7 @@ export const updateOrderStatus = async (req, res) => {
     const updated = await Order.findByIdAndUpdate(id, { status }, { new: true });
     if (!updated) return res.status(404).json({ message: 'Order not found' });
 
+    console.log("Updated order status:", id, status);
     res.status(200).json(updated);
   } catch (err) {
     console.error('Error updating order status:', err);
@@ -91,3 +92,20 @@ export const getUserById = async (req, res) => {
   }
 };
 
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+
+    const formattedUsers = users.map((user) => ({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      createdAt: user.createdAt,
+    }));
+    console.log("Users fetched:", formattedUsers);
+    res.status(200).json(formattedUsers);
+  } catch (err) {
+    console.error('Error fetching users:', err);
+    res.status(500).json({ message: 'Failed to fetch users' });
+  }
+};
